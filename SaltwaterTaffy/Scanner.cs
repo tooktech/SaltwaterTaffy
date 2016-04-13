@@ -43,9 +43,40 @@ namespace SaltwaterTaffy
                                         HostnamesSection(
                                             x.Items.OfType<hostnames>().DefaultIfEmpty(null).FirstOrDefault()),
                                     OsMatches = OsMatchesSection(
-                                        x.Items.OfType<os>().DefaultIfEmpty(null).FirstOrDefault())
+                                        x.Items.OfType<os>().DefaultIfEmpty(null).FirstOrDefault()),
+                                        Mac = ExtractMac(x),
+                                        Vendor = ExtractVendor(x)
                                 })
                         : Enumerable.Empty<Host>();
+        }
+
+        private string ExtractMac(host item) {
+            if (item.Items == null || item.Items.Length < 1) return String.Empty;
+            foreach (var o in item.Items)
+            {
+                var typeOfO = o.GetType();
+                if (typeOfO.Equals(typeof(address)))
+                {
+                    return ((address)o).addr;
+                }
+            }
+
+            return String.Empty;
+        }
+
+        private string ExtractVendor(host item)
+        {
+            if (item.Items == null || item.Items.Length < 1) return String.Empty;
+            foreach (var o in item.Items)
+            {
+                var typeOfO = o.GetType();
+                if (typeOfO.Equals(typeof(address)))
+                {
+                    return ((address)o).vendor;
+                }
+            }
+
+            return String.Empty;
         }
 
         public int Total { get; set; }
@@ -236,6 +267,7 @@ namespace SaltwaterTaffy
                 {
                     NmapFlag.TcpSynScan,
                     NmapFlag.OsDetection
+                    //NmapFlag.PingScan
                 });
 
             return new ScanResult(ctx.Run()).Hosts;
@@ -277,7 +309,8 @@ namespace SaltwaterTaffy
             ctx.Options.AddAll(new[]
                 {
                     NmapFlag.ServiceVersion,
-                    NmapFlag.OsDetection
+                    //NmapFlag.OsDetection,
+                    NmapFlag.HostScan
                 });
 
             // Add the appropriate flag if we're not performing a default scan

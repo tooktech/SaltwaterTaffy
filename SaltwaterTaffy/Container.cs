@@ -59,6 +59,8 @@ namespace SaltwaterTaffy.Container
         public IEnumerable<Port> Ports { get; set; }
         public IEnumerable<ExtraPorts> ExtraPorts { get; set; }
         public IEnumerable<Os> OsMatches { get; set; }
+        public string Mac { get; set; }
+        public string Vendor { get; set; }
     }
 
     /// <summary>

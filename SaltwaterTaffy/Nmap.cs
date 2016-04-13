@@ -520,7 +520,7 @@ namespace SaltwaterTaffy
         public NmapContext()
         {
             Path = GetPathToNmap();
-            OutputPath = System.IO.Path.GetTempFileName();
+            OutputPath = @"C:\temp\dumpnmap1.txt";
             Options = new NmapOptions();
         }
 

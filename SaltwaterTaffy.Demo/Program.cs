@@ -11,17 +11,23 @@ namespace SaltwaterTaffy.Demo
     {
         private static void Main(string[] args)
         {
-            Console.Write("Enter an IP or subnet: ");
-            var target = new Target(Console.ReadLine().Trim());
+            //Console.Write("Enter an IP or subnet: ");
+            var target = new Target("192.168.0.0/24");
             Console.WriteLine("Initializing scan of {0}", target);
+
+            //var result = new Scanner(target).HostDiscovery();
+
+            //var result = new Scanner(target).GetAllHostNetworkInterfaces();
+
             ScanResult result = new Scanner(target).PortScan();
             Console.WriteLine("Detected {0} host(s), {1} up and {2} down.", result.Total, result.Up, result.Down);
             foreach (Host i in result.Hosts)
             {
+                Console.WriteLine("<-----BEGIN HOST----->");
                 Console.WriteLine("Host: {0}", i.Address);
                 foreach (Port j in i.Ports)
                 {
-                    Console.Write("\tport {0}", j.PortNumber);
+                    Console.WriteLine("\tport {0}", j.PortNumber);
                     if (!string.IsNullOrEmpty(j.Service.Name))
                     {
                         Console.Write(" is running {0}", j.Service.Name);
@@ -39,7 +45,13 @@ namespace SaltwaterTaffy.Demo
                 {
                     Console.WriteLine("and is probably running {0}", i.OsMatches.First().Name);
                 }
+
+                Console.WriteLine("MAC: {0}", i.Mac);
+                Console.WriteLine("Vendor: {0}", i.Vendor);
+                Console.WriteLine("<-----END HOST----->");
+                Console.WriteLine("");
             }
+
 
             Console.Read();
         }
